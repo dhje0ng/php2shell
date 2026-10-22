@@ -21,8 +21,6 @@ export function assessVersion(version: string | null): Pick<CheckResult, 'verdic
       : { verdict: 'risk', reason: '공개된 PHP 버전이 PHP2Shell 공식 패치 버전보다 낮습니다. 배포판의 백포트 패치가 적용되었을 수 있으므로 패키지 보안 공지를 함께 확인하세요.', recommendedVersion: `${branch}.${fix}` };
   }
   if (Number(major) < 8 || (Number(major) === 8 && Number(minor) < 2)) {
-    // The PHP2Shell disclosure covers PHP 5.4 onward. Older versions are unsupported,
-    // but this advisory alone cannot establish their susceptibility.
     if (Number(major) < 5 || (Number(major) === 5 && Number(minor) < 4)) return { verdict: 'unknown', reason: '공식 확인 범위 이전의 지원 종료 버전입니다. PHP2Shell 영향 여부를 단정할 수 없으며 지원 중인 PHP로 이전해야 합니다.', recommendedVersion: '8.5.12' };
     return { verdict: 'risk', reason: 'PHP2Shell의 영향 범위에 포함된 지원 종료 버전입니다. 지원 중인 PHP로 업그레이드하거나 공급업체의 보안 패치 제공 여부를 확인하세요.', recommendedVersion: '8.5.12' };
   }

@@ -23,7 +23,6 @@ async function requestHeaders(url: URL, method: 'HEAD' | 'GET', signal: AbortSig
   return new Promise((resolve, reject) => {
     const req = (url.protocol === 'https:' ? https : http).request(url, {
       method, signal, agent: false,
-      // Pin the verified DNS answer while retaining the original Host and TLS SNI.
       lookup: (_hostname, options, callback) => {
         if (options?.all) callback(null, [pinned]);
         else callback(null, pinned.address, pinned.family);
@@ -37,7 +36,6 @@ async function requestHeaders(url: URL, method: 'HEAD' | 'GET', signal: AbortSig
         if (value) headers[key] = (Array.isArray(value) ? value.join(', ') : value).slice(0, 4096);
       }
       resolve({ status: response.statusCode ?? 0, location: response.headers.location, headers });
-      // Never download or inspect the response body.
       response.destroy();
     });
     req.setTimeout(8000, () => req.destroy(new Error('응답 시간이 초과되었습니다.')));

@@ -2,7 +2,6 @@ import ipaddr from 'ipaddr.js';
 
 export function isPublicAddress(address: string): boolean {
   if (!ipaddr.isValid(address)) return false;
-  // process() converts IPv4-mapped IPv6 before range checks.
   return ipaddr.process(address).range() === 'unicast';
 }
 
